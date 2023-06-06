@@ -10,8 +10,16 @@ th,td{
     font-weight: 500;
     color: #fffffe
 }
+.recoverBtn{
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease-out;
+}
+.trashRow:hover .recoverBtn{
+    opacity: 1;
+    visibility: visible
 
-
+}
 
 
 

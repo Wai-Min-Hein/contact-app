@@ -13,12 +13,16 @@ import user from "../../img/user.png";
 import { useContext } from "react";
 import { StateContext } from "../Services/Context/Context";
 const NavBar = () => {
+
+ 
+  
+
   const {menuActive, setMenuActive} = useContext(StateContext)
 
   return (
     <div className="flex justify-between items-center  gap-5 px-6 pt-2">
       <div className="flex items-center justify-start gap-3 basis-[18%]">
-        <button onClick={() => setMenuActive(!menuActive)} className="p-3 hover:bg-gray-200 duration-200 rounded-full">
+        <button onClick={() =>  setMenuActive(!menuActive)} className="p-3 hover:bg-gray-200 duration-200 rounded-full">
 
         <BiMenu className="text-2xl" />
         </button>

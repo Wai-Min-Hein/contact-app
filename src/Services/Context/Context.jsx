@@ -1,9 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
+import { getContactById } from "../Apis/FireStoreApi";
 
 export const StateContext = createContext()
 
 const StateContextProvider = ({children}) => {
     const [menuActive, setMenuActive] = useState(false)
+    
 
     const data = {menuActive, setMenuActive}
 

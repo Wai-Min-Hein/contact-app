@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AiFillPrinter } from "react-icons/ai";
 import { FiDownload } from "react-icons/fi";
 import { FiUpload } from "react-icons/fi";
@@ -14,7 +14,24 @@ import { BsColumns } from "react-icons/bs";
 import { StateContext } from "../Services/Context/Context";
 import { motion } from "framer-motion";
 import ContactTableComponent from "./ContactTableComponent";
+import { getAllContactData, postContactData } from "../Services/Apis/FireStoreApi";
+import { useNavigate } from "react-router-dom";
+import { useGetContactQuery } from "../Services/Apis/ContactApi";
 const ContactTable = () => {
+
+  const [allContacts, setAllContacts] = useState([])
+
+  const nav = useNavigate();
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) nav("/login");
+  }, []);
+
+  // const { data } = useGetContactQuery(token);
+
+
   const { menuActive } = useContext(StateContext);
 
   const [checkedAmount, setCheckedAmount] = useState(0);
@@ -22,35 +39,22 @@ const ContactTable = () => {
   const [modalActive, setModalActive] = useState(false);
   const [modalActive2, setModalActive2] = useState(false);
 
-  const contacts = [
-    {
-      name: "Wai Min Hein",
-      email: "wai06276@gmail.com",
-      phNo: "09423996881",
-      company: "Tesla",
-    },
-    {
-      name: "Wai Min Hein",
-      email: "wai06276@gmail.com",
-      phNo: "09423996881",
-      company: "Tesla",
-    },
-    {
-      name: "Wai Min Hein",
-      email: "wai06276@gmail.com",
-      phNo: "09423996881",
-      company: "Tesla",
-    },
-  ];
+  // const contacts = data?.contacts.data;
+
+  useMemo(() => {
+    getAllContactData(setAllContacts,token)
+  }, [])
+
+  
 
   return (
     <motion.div
       initial={{ marginLeft: "20%" }}
       animate={menuActive ? { marginLeft: 0 } : { marginLeft: "20%" }}
       transition={{ duration: 0.25 }}
-      className={`flex-1 px-8 `}
+      className={`flex-1 px-8  `}
     >
-      <table className="table-auto w-full px-5 font-medium">
+      <table className="table-auto w-full px-5 font-medium ">
         <thead className="">
           {checkedAmount <= 0 ? (
             <tr className="border-b-[1px] ">
@@ -71,7 +75,10 @@ const ContactTable = () => {
                 indicator
               </motion.th>
 
-              <th colSpan={menuActive ? 1 : 2} className="text-end relative font-primary">
+              <th
+                colSpan={menuActive ? 1 : 2}
+                className="text-end relative font-primary"
+              >
                 <div className="flex items-center justify-end gap-4">
                   <AiFillPrinter className="text-xl" />
                   <FiDownload className="text-xl" />
@@ -170,7 +177,7 @@ const ContactTable = () => {
                           }
                     }
                     transition={{ duration: 0.2 }}
-                    className="absolute top-[3rem]   right-0 px-4 py-6 bg-white shadow-lg rounded-sm z-50"
+                    className="absolute top-[3rem]   right-0 px-4 py-6 bg-button text-button-text shadow-lg rounded-sm z-50"
                   >
                     <div className="">
                       <div className="flex items-center justify-start gap-5">
@@ -188,13 +195,13 @@ const ContactTable = () => {
             </tr>
           )}
         </thead>
-        <tbody className="">
+        <tbody className="max-h-[50vh] overflow-y-auto">
           <tr>
             <td>
-              <p className="my-3">Contacts ({contacts?.length})</p>
+              <p className="my-3">Contacts ({allContacts?.length})</p>
             </td>
           </tr>
-          {contacts?.map((contact, i) => (
+          {allContacts?.map((contact, i) => (
             <ContactTableComponent
               key={i}
               contact={contact}
