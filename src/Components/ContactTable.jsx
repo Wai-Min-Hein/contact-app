@@ -17,13 +17,41 @@ import ContactTableComponent from "./ContactTableComponent";
 import { getAllContactData, postContactData } from "../Services/Apis/FireStoreApi";
 import { useNavigate } from "react-router-dom";
 import { useGetContactQuery } from "../Services/Apis/ContactApi";
+import { useMediaQuery } from 'react-responsive'
 const ContactTable = () => {
+
+  const isDesktop = useMediaQuery({
+    query: '(min-width: 1537px)'
+  })
+  const laptop = useMediaQuery({
+    query: '(min-width: 1280px)'
+  })
+  const tablet = useMediaQuery({
+    query: '(min-width: 1024px)'
+  })
+
+  const phone = useMediaQuery({
+    query: '(min-width: 768px)'
+  })
+
+  const smPhone = useMediaQuery({
+    query: '(min-width: 640px)'
+  })
+
+
+  
+
+  // const nameBgColors = ['bg-[#482ff7]','bg-[#9c1de7]','bg-[#f3558e]','bg-[#f3f169]','bg-[#a7ff83]','bg-[#28c7fa]','bg-[#ea7dc7]']
 
   const [allContacts, setAllContacts] = useState([])
 
   const nav = useNavigate();
 
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const userEmail = user?.email
+
 
   useEffect(() => {
     if (!token) nav("/login");
@@ -32,7 +60,7 @@ const ContactTable = () => {
   // const { data } = useGetContactQuery(token);
 
 
-  const { menuActive } = useContext(StateContext);
+  const { menuActive,searchContact } = useContext(StateContext);
 
   const [checkedAmount, setCheckedAmount] = useState(0);
   const [minusClick, setMinusClick] = useState(false);
@@ -41,43 +69,45 @@ const ContactTable = () => {
 
   // const contacts = data?.contacts.data;
 
-  useMemo(() => {
-    getAllContactData(setAllContacts,token)
+  
+
+  useEffect(() => {
+    getAllContactData(setAllContacts,userEmail)
   }, [])
 
-  
+const searchItems =searchContact.length>0 ? allContacts?.filter(contact => contact?.name.toLowerCase().includes(searchContact)):allContacts
 
   return (
     <motion.div
-      initial={{ marginLeft: "20%" }}
-      animate={menuActive ? { marginLeft: 0 } : { marginLeft: "20%" }}
+      initial={tablet?{ marginLeft: "18%" }:{ marginLeft: 0 }}
+      animate={menuActive ? { marginLeft: 0 } :( tablet?{ marginLeft: "18%" }:{ marginLeft: 0 })}
       transition={{ duration: 0.25 }}
-      className={`flex-1 px-8  `}
+      className={`flex-1 lg:px-8 px-1  `}
     >
-      <table className="table-auto w-full px-5 font-medium ">
+      <table className="table-auto w-full px-5 font-medium">
         <thead className="">
           {checkedAmount <= 0 ? (
             <tr className="border-b-[1px] ">
-              <th className="text-start w-1/5">Name</th>
+              <th className="text-start w-[40%] sm:w-[35%] md:w-[30%] lg:w-1/4">Name</th>
               <th className="text-start w-1/5">Email</th>
-              <th className="text-start  w-1/5">phone number</th>
-              <th className="text-start">job title and company</th>
-              <motion.th
+              <th className="text-start  w-1/5">ph no</th>
+              <th className="text-start">job</th>
+              {/* <motion.th
                 initial={{ opacity: 0, display: "none" }}
                 animate={
                   menuActive
-                    ? { opacity: 1, display: "inline-block" }
+                    ? { opacity: 1, display: "block" }
                     : { opacity: 0, display: "none" }
                 }
                 transition={{ duration: 0.45 }}
-                className="text-start"
+                className="text-start hidden md:block"
               >
                 indicator
-              </motion.th>
+              </motion.th> */}
 
               <th
                 colSpan={menuActive ? 1 : 2}
-                className="text-end relative font-primary"
+                className="text-end relative font-primary hidden md:block"
               >
                 <div className="flex items-center justify-end gap-4">
                   <AiFillPrinter className="text-xl" />
@@ -128,7 +158,7 @@ const ContactTable = () => {
             </tr>
           ) : (
             <tr className="border-b-[1px]">
-              <th className="text-start w-1/5">
+              <th className="text-start w-3/5 sm:w-2/5">
                 <div className="flex items-center justify-start gap-3">
                   <button>
                     <AiFillMinusSquare
@@ -140,12 +170,12 @@ const ContactTable = () => {
                   <span>{checkedAmount} selected</span>
                 </div>
               </th>
-              <th className="w-1/5"></th>
-              <th className=" w-1/5"></th>
-              <th></th>
-              <th></th>
+              <th className="w-1/5  "></th>
+              <th className=" w-1/5 "></th>
+              <th className=" w-1/5 "></th>
+              {/* <th className=" w-1/5 "></th> */}
 
-              <th colSpan={menuActive ? 1 : 2} className="text-end relative">
+              <th colSpan={menuActive ? 1 : 2} className="text-end relative hidden md:block">
                 <div className="flex items-center justify-end gap-4">
                   <AiFillPrinter className="text-xl" />
                   <FiDownload className="text-xl" />
@@ -197,17 +227,19 @@ const ContactTable = () => {
         </thead>
         <tbody className="max-h-[50vh] overflow-y-auto">
           <tr>
-            <td>
+            <td className="">
               <p className="my-3">Contacts ({allContacts?.length})</p>
             </td>
           </tr>
-          {allContacts?.map((contact, i) => (
+          {searchItems?.map((contact, index) => (
             <ContactTableComponent
-              key={i}
+              key={index}
+              index={index}
               contact={contact}
               setCheckedAmount={setCheckedAmount}
               checkedAmount={checkedAmount}
               minusClick={minusClick}
+              // nameBgColors={nameBgColors}
             />
           ))}
         </tbody>

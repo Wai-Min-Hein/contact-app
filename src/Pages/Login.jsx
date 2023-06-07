@@ -43,6 +43,10 @@ const Login = () => {
         <div className="">
           <button  className="bg-button px-3 py-2 text-button-text rounded-md mt-5">login</button>
         </div>
+
+        <div className="mt-5">
+          <h1>Don't you have account? <span onClick={() => nav('/register')} className="text-blue-600 cursor-pointer">Register now</span> </h1>
+        </div>
       </form>
     </div>
   )

@@ -18,10 +18,18 @@ const ContactTableComponent = ({
   checkedAmount,
   setCheckedAmount,
   minusClick,
+  index
 }) => {
+
+  const nameBgColors = ['bg-[#482ff7]','bg-[#9c1de7]','bg-[#f3558e]','bg-[#f3f169]','bg-[#a7ff83]','bg-[#28c7fa]','bg-[#ea7dc7]']
+  
+  const contactImage = contact?.imgUrl
   const ref = useRef();
   const [isHovered, setIsHovered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
+
+  const username = contact?.name;
+
 
   const nav = useNavigate();
 
@@ -55,6 +63,15 @@ const ContactTableComponent = ({
     },
     buttonsStyling: false
   })
+
+  // const colorRandomLength = Math.floor(Math.random()* (nameBgColors?.length))
+  const colorCode =  nameBgColors[4]
+
+
+  
+
+  
+
 
   
 
@@ -116,14 +133,12 @@ const ContactTableComponent = ({
       }`}
     >
       <td
-        onClick={(e) => {
-          nav(`person/${contactId}`);
-        }}
-        className=""
+        
+        className=" w-[40%] sm:w-[35%] md:w-[30%] lg:w-1/4"
       >
         <div className="flex items-center justify-start gap-2">
           {isChecked || isHovered ? (
-            <div className="w-10 h-10 flex items-center">
+            <div className="md:w-10 md:h-10 w-6 h-6 flex items-center">
               <input
                 value={isChecked}
                 onChange={handleCheckboxChange}
@@ -132,8 +147,19 @@ const ContactTableComponent = ({
               />
             </div>
           ) : (
-            <div className="w-10 h-10">
-              <BiUserCircle className="text-4xl " />
+            <div
+            onClick={() => {
+              nav(`person/${contactId}`);
+            }}
+             className="md:w-10 md:h-10 w-6 h-6  overflow-hidden ">
+              {contactImage? (
+                <img src={contactImage} className="w-full h-full rounded-full " alt="" />
+              ) : (
+
+                <div className={`w-full h-full rounded-full ${colorCode} grid place-items-center`}>
+                <h1 className="text-xl ">{username && username[0]}</h1>
+              </div>
+              )}
             </div>
           )}
           {contact?.name}
@@ -160,17 +186,17 @@ const ContactTableComponent = ({
       >
         {contact?.jobTitle}
       </td>
-      <td
+      {/* <td
         onClick={(e) => {
           nav(`person/${contactId}`);
         }}
-        className="relative"
-      ></td>
-      <td>
+        className="relative "
+      ></td> */}
+      <td className="hidden md:block">
         {(isChecked || isHovered||modalActive) && (
           <div
             onClick={() => nav("/")}
-            className={`flex items-center justify-end gap-4`}
+            className={`flex items-center justify-end gap-4  `}
           >
             <AiOutlineStar className="text-xl" />
             <MdOutlineModeEditOutline className="text-xl" />

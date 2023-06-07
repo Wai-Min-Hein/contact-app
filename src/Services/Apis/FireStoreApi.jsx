@@ -13,8 +13,8 @@ export const postContactData = (object) => {
       });
   };
 
-  export const getAllContactData = (setAllContacts,userToken) => {
-    const contactByToken = query(contactsRef, where("userToken", "==", userToken));
+  export const getAllContactData = (setAllContacts,userEmail) => {
+    const contactByToken = query(contactsRef, where("userEmail", "==", userEmail));
 
     onSnapshot(contactByToken, (response) => {
       setAllContacts(

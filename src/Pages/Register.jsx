@@ -18,7 +18,7 @@ const handleRegister = async (e) => {
   try {
     e.preventDefault()
     const {data} = await register(contactData)
-    if(data.success) nav('/login')
+    if(data.success) nav('/')
   } catch (error) {
     console.log(error)
   }

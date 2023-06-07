@@ -6,11 +6,34 @@ import { motion } from "framer-motion";
 import EditContactForm from "../Components/EditContactForm";
 import { LuImagePlus } from "react-icons/lu";
 import { uploadContactImage } from "../Services/Apis/ImageUploadApi";
+import { useMediaQuery } from "react-responsive";
 
 const Person = () => {
   const [contact, setContact] = useState({});
+
+  const isDesktop = useMediaQuery({
+    query: '(min-width: 1537px)'
+  })
+  const laptop = useMediaQuery({
+    query: '(min-width: 1280px)'
+  })
+  const tablet = useMediaQuery({
+    query: '(min-width: 1024px)'
+  })
+
+  const phone = useMediaQuery({
+    query: '(min-width: 768px)'
+  })
+
+  const smPhone = useMediaQuery({
+    query: '(min-width: 640px)'
+  })
   const nav = useNavigate();
   const { id } = useParams();
+
+  const originImg = contact?.imgUrl
+
+  
 
   useMemo(() => {
     getContactById(setContact, id);
@@ -51,25 +74,30 @@ const Person = () => {
   }, []);
   return (
     <motion.div
-      initial={{ marginLeft: "20%" }}
-      animate={menuActive ? { marginLeft: 0 } : { marginLeft: "20%" }}
+    initial={tablet?{ marginLeft: "18%" }:{ marginLeft: 0 }}
+    animate={menuActive ? { marginLeft: 0 } :( tablet?{ marginLeft: "18%" }:{ marginLeft: 0 })}
       transition={{ duration: 0.25 }}
-      className={`mt-8 bg-transparent ${menuActive ? "px-8" : ""}`}
+      className={`mt-8 bg-transparent ${menuActive ? "" : ""}`}
     >
-      <div className="">
+      <div className="ml-8">
         <div className="pb-4 mr-8 border-b-2 ">
           {editActive ? (
             <div className="">
               <div
                 onClick={() => fileRef.current.click()}
-                className="w-[8rem] h-[8rem] mb-8 bg-button rounded-full grid place-items-center cursor-pointer overflow-hidden"
+                className="w-[4rem] h-[4rem] md:w-[6rem] md:h-[6rem]  lg:w-[8rem] lg:h-[8rem] mb-8 bg-button rounded-full grid place-items-center cursor-pointer overflow-hidden"
               >
                 {inputImage? (
                   <img src={inputImage} className="block w-full h-full" alt="" />
                     
                 ): (
+                  originImg? (
+                    <img src={originImg} className="block w-full h-full" alt="" />
+                  ) : (
 
                     <LuImagePlus className="text-button-text text-4xl" />
+                  )
+
                 )}
               </div>
               <input
@@ -85,7 +113,7 @@ const Person = () => {
             <div className="flex items-center justify-start gap-8">
               {contact?.imgUrl ? (
                 <div className="w-[10rem] h-[10rem] rounded-full overflow-hidden">
-                  <img src={contact?.imgUrl} className="block" alt="" />
+                  <img src={contact?.imgUrl} className="w-full h-full " alt="" />
                 </div>
               ) : (
                 <div className="w-[10rem] h-[10rem] rounded-full bg-green-500 grid place-items-center">
@@ -112,6 +140,7 @@ const Person = () => {
               contact={contact}
               imgUrl={imgUrl}
               inputImage={inputImage}
+              originImg={originImg}
             />
           ) : (
             <div className="mt-10 flex items-center justify-start gap-10">
@@ -123,7 +152,7 @@ const Person = () => {
               <div className="">
                 <h6>Records</h6>
                 <p>Last update time : {contact?.updateDate}</p>
-                <p>Last update time : {contact?.createDate}</p>
+                <p>Created at : {contact?.createDate}</p>
               </div>
             </div>
           )}

@@ -4,9 +4,14 @@ import { editComment } from "../Services/Apis/FireStoreApi";
 import { useNavigate } from "react-router-dom";
 
 
-const EditContactForm = ({contact,imgUrl, inputImage}) => {
+const EditContactForm = ({contact,imgUrl, inputImage,originImg}) => {
 
     const BtnDisable = inputImage==0 ? false: (imgUrl? false:true )
+
+    if(imgUrl) {console.log('yes')}
+    else{console.log('no')}
+
+    
 
 
 
@@ -25,8 +30,18 @@ const EditContactForm = ({contact,imgUrl, inputImage}) => {
 
   const [updateData, setUpdateData] = useState({ ...contact,name, phone, email, address, jobTitle,imgUrl, updateDate:getTime()})
 
+  console.log(updateData)
+
+
   useEffect(() => {
-    setUpdateData({ ...contact,name, phone, email, address, jobTitle,imgUrl, updateDate:getTime()})
+    // setUpdateData({ ...contact,name, phone, email, address, jobTitle,imgUrl, updateDate:getTime()})
+    if(imgUrl){
+      setUpdateData({ ...contact,name, phone, email, address, jobTitle,imgUrl, updateDate:getTime()})
+    }
+    else{
+      setUpdateData({ ...contact,name, phone, email, address, jobTitle,imgUrl:originImg, updateDate:getTime()})
+    }
+
   }, [imgUrl])
 
 

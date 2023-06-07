@@ -29,6 +29,12 @@ const New = () => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [jobTitle, setJobTitle] = useState("");
+
+const fileRef = useRef()
+
+
+  const [inputImage, setInputImage] = useState(0);
+
   const [imgUrl, setImgUrl] = useState("")
 
   const userName = user.name
@@ -54,8 +60,21 @@ const New = () => {
     
   }
 
+  const handleImageUpload = (event) => {
+    uploadContactImage(event.target.files[0], setImgUrl, setProgressPercent);
+
+    const file = event?.target?.files[0];
+
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setInputImage(imageURL);
+    }
+  };
+
+  const BtnDisable = inputImage==0 ? false: (imgUrl? false:true )
+
+
  
-const fileRef = useRef()
 
  
 
@@ -72,10 +91,16 @@ const fileRef = useRef()
       className={`mt-8 bg-transparent ${menuActive ? "px-8" : ""}`}
     >
       <form onSubmit={handleCreateContact} action="" className=" w-[20rem]">
-        <div onClick={() => fileRef.current.click()} className="w-[10rem] h-[10rem] mb-8 bg-button rounded-full grid place-items-center cursor-pointer" >
-          <LuImagePlus className="text-button-text text-4xl"/>
+        <div onClick={() => fileRef.current.click()} className="w-[8rem] h-[8rem] overflow-hidden mb-8 bg-button rounded-full grid place-items-center cursor-pointer" >
+        {inputImage? (
+                  <img src={inputImage} className="block w-full h-full" alt="" />
+                    
+                ): (
+
+                    <LuImagePlus className="text-button-text text-4xl" />
+                )}
         </div>
-        <input ref={fileRef} onChange={(event) => uploadContactImage(event.target.files[0], setImgUrl, setProgressPercent)} type="file" name="" id="" className="hidden" />
+        <input ref={fileRef} onChange={handleImageUpload} type="file" name="" id="" className="hidden" />
         <div className="">
           <input
             value={name}
@@ -127,8 +152,10 @@ const fileRef = useRef()
           />
         </div>
         <div className="">
-          <button className="bg-button px-3 py-2 text-button-text rounded-md">
-            Add Contact
+          <button disabled={BtnDisable} className="bg-button px-3 py-2 text-button-text rounded-md disabled:cursor-wait">
+          {
+                BtnDisable? (<span>Loading...</span>): (<span>Add contact</span>)
+            }
           </button>
         </div>
       </form>

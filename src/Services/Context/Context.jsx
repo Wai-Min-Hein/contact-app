@@ -5,9 +5,9 @@ export const StateContext = createContext()
 
 const StateContextProvider = ({children}) => {
     const [menuActive, setMenuActive] = useState(false)
-    
+    const [searchContact, setSearchContact] = useState('')
 
-    const data = {menuActive, setMenuActive}
+    const data = {menuActive, setMenuActive,searchContact, setSearchContact}
 
     return (
         <StateContext.Provider value={data}>

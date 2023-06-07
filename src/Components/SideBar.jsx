@@ -69,13 +69,14 @@ const SideBar = () => {
   useEffect(() => {
     if(location.pathname == '/') setContact(true)
     if(location.pathname=='/suggestion') setConsolidate(true)
+    if(location.pathname=='/person') setContact(true)
 
   }, [])
 
 
   return (
     <motion.div
-    className="absolute w-[16%] top-0 left-0"
+    className="absolute w-[37%] md:w-[25%] lg:w-[18%]  top-0 left-0 bg-background h-full z-50   lg:block"
       initial={{x:0}}
 
       animate={menuActive ? { x: -400 } : { x: 0}}
@@ -85,7 +86,7 @@ const SideBar = () => {
       <div className="px-2 mt-5">
         <button onClick={() =>  setModalActive(!modalActive)} className="flex items-center justify-between gap-3 bg-button shadow px-5 py-3 rounded-full">
           <FaPlus />
-          <span className="text-md text-button-text font-semibold">Adding a contact</span>
+          <span className="text-md text-button-text font-medium">Add a contact</span>
           <motion.div
                     initial={{
                       opacity: 0,
@@ -114,7 +115,7 @@ const SideBar = () => {
                     <GrFormClose onClick={() => setModalActive(false)} className="absolute top-0 right-0 text-2xl cursor-pointer"/>
                     <div className="">
                       <Link to={'/new'}>
-                      <div className="flex items-center justify-start gap-5 mb-3">
+                      <div className="flex items-center justify-start gap-5 md:gap-2 mb-3">
                         <FaRegUser />
                         <span>Add contact</span>
                       </div>
