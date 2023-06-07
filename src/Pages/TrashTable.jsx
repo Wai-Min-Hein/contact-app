@@ -29,15 +29,15 @@ const TrashTable = () => {
   const nav = useNavigate();
 
   const token = localStorage.getItem("token");
+  const userEmail = localStorage.getItem("userEmail");
+
   const { menuActive } = useContext(StateContext);
 
   useMemo(() => {
-    getAllTrashData(setAllTrash, token);
+    getAllTrashData(setAllTrash, userEmail);
   }, []);
 
-  useEffect(() => {
-    if (!token) nav("/login");
-  }, []);
+
   return (
     <motion.div
     initial={tablet?{ marginLeft: "18%" }:{ marginLeft: 0 }}

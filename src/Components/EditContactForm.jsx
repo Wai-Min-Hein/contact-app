@@ -8,8 +8,6 @@ const EditContactForm = ({contact,imgUrl, inputImage,originImg}) => {
 
     const BtnDisable = inputImage==0 ? false: (imgUrl? false:true )
 
-    if(imgUrl) {console.log('yes')}
-    else{console.log('no')}
 
     
 
@@ -43,6 +41,10 @@ const EditContactForm = ({contact,imgUrl, inputImage,originImg}) => {
     }
 
   }, [imgUrl])
+
+  useEffect(() => {
+    setUpdateData({ ...contact,name, phone, email, address, jobTitle,imgUrl:originImg, updateDate:getTime()})
+  }, [name, phone, email, address, jobTitle])
 
 
 

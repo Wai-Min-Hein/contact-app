@@ -10,13 +10,17 @@ import { MdOutlineAutoFixHigh } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { BiPlus } from "react-icons/bi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useLogoutMutation } from "../Services/Apis/authApi";
+// import { useLogoutMutation } from "../Services/Apis/authApi";
 import { removeUser } from "../Services/slice/userSlice";
 import { useDispatch } from "react-redux";
 import { FiUpload } from "react-icons/fi";
 import { BsColumns } from "react-icons/bs";
 import { LuUsers } from "react-icons/lu";
 import { GrFormClose } from "react-icons/gr";
+import { toast } from "react-toastify";
+import { logOutApi } from "../Services/Apis/authApi";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase.config";
 
 
 
@@ -28,7 +32,7 @@ const SideBar = () => {
 
   const nav = useNavigate()
 
-  const [logout] = useLogoutMutation()
+  // const [logout] = useLogoutMutation()
 
   const token = localStorage.getItem('token')
 
@@ -36,22 +40,37 @@ const SideBar = () => {
 
   const [modalActive, setModalActive] = useState(false);
 
+  const signOut = (e) => {
+    e.preventDefault()
+    logOutApi();
+  };
+
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, res => {
+  //     if(res?.accessToken)
+
   
+  //       nav("/")
+  //     })
+  // }, [])
 
 
 
-  const handleLogout = async () => {
-    try {
-      const {data} = await logout(token)
-      console.log(data)
-      dispatch(removeUser())
-      if(data.success) nav('/login')
+  // const handleLogout = async () => {
+  //   try {
+  //     const {data} = await logout(token)
+  //     console.log(data)
+  //     dispatch(removeUser())
+  //     if(data.success) nav('/login')
+  //     toast.success("Logout successfully.")
       
-    } catch (error) {
-      console.log(error)
-    }
+  //   } catch (error) {
+  //     toast.error("Can't logout.")
+
+  //     console.log(error)
+  //   }
    
-  }
+  // }
   
   const { menuActive } = useContext(StateContext);
   const [contact, setContact] = useState(false)
@@ -70,6 +89,8 @@ const SideBar = () => {
     if(location.pathname == '/') setContact(true)
     if(location.pathname=='/suggestion') setConsolidate(true)
     if(location.pathname=='/person') setContact(true)
+    if(location.pathname=='/often') setOften(true)
+    if(location.pathname=='/other') setOther(true)
 
   }, [])
 
@@ -137,10 +158,14 @@ const SideBar = () => {
             <p>Contact</p>
           </button>
           </Link>
+          <Link to={'/often'}>
           <button onClick={() => (setContact(false), setOften(true), setOther(false), setConsolidate(false), setTrash(false))} className={`flex items-center justify-start gap-8   px-6  rounded-e-full py-2 w-full ${often?'bg-button text-button-text' :'hover:bg-[#4f546b]'}`}>
             <RxCounterClockwiseClock />
             <p>Often</p>
           </button>
+          </Link>
+          <Link to={'/other'}>
+
           <button  onClick={() => (setContact(false), setOften(false), setOther(true), setConsolidate(false), setTrash(false))} className={`flex items-center justify-between gap-8   px-6  rounded-e-full py-2 w-full ${other? "bg-button text-button-text ": "hover:bg-[#4f546b]"}`}>
             <div className="flex items-center justify-start gap-4">
               <LuBookDown />
@@ -148,6 +173,8 @@ const SideBar = () => {
             </div>
             <BiInfoCircle />
           </button>
+          </Link>
+
         </div>
       </div>
 
@@ -166,7 +193,7 @@ const SideBar = () => {
         </button>
         </Link>
 
-        <button onClick={handleLogout} className="px-3 py-2 bg-button text-button-text rounded-md mt-5 w-full">
+        <button onClick={signOut} className="px-3 py-2 bg-button text-button-text rounded-md mt-5 w-full">
           Log Out
         </button>
       </div>

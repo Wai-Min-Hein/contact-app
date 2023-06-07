@@ -1,15 +1,13 @@
-import { motion } from "framer-motion";
 import { useContext, useEffect } from "react";
-import { StateContext } from "../Services/Context/Context";
-
-import svg from '../../img/suggession.svg'
 import { useNavigate } from "react-router-dom";
+import { StateContext } from "../Services/Context/Context";
+import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
+const Often = () => {
+  const token = localStorage.getItem("token");
+  const { menuActive } = useContext(StateContext);
+  const nav = useNavigate();
 
-const Suggestion = () => {
-  const nav = useNavigate()
-
-  
   const isDesktop = useMediaQuery({
     query: '(min-width: 1537px)'
   })
@@ -28,27 +26,22 @@ const Suggestion = () => {
     query: '(min-width: 640px)'
   })
 
-  const token = localStorage.getItem('token')
-
-
- 
-  const { menuActive } = useContext(StateContext);
-
+    // useEffect(() => {
+    //     if (!token) nav("/login");
+    //   }, []);
   return (
     <motion.div
     initial={tablet?{ marginLeft: "18%" }:{ marginLeft: 0 }}
     animate={menuActive ? { marginLeft: 0 } :( tablet?{ marginLeft: "18%" }:{ marginLeft: 0 })}
       transition={{ duration: 0.25 }}
-      className="text-para px-8"
-    >
-      <div className="">
-          <img src={svg}  className="w-[20rem] md:w-[22rem] lg:w-[30rem] h-auto mx-auto" alt="" />
-        <h4 className="text-primary text-center font-medium text-xl md:text-2xl lg:text-3xl ">
-          Good. There are no new suggestions.
-        </h4>
-      </div>
-    </motion.div>
-  );
-};
+      className={` px-8  `}>
 
-export default Suggestion;
+        <div className="w-full h-[80vh] grid place-items-center">
+            <h2 className="text-2xl">This feature isn't available right now.</h2>
+        </div>
+      
+    </motion.div>
+  )
+}
+
+export default Often

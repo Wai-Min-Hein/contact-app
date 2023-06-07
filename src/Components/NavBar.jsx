@@ -47,8 +47,8 @@ const NavBar = () => {
         
       </div>
       <div className="flex items-center justify-start gap-3">
-      <div className="flex items-center justify-start gap-6 px-5">
-          <GrCircleQuestion className="text-2xl" />
+      <div className="flex items-center justify-start gap-6 px-5 text-white">
+          <GrCircleQuestion className="text-2xl text-white " />
           <TbSettings className="text-2xl" />
         </div>
         <div className="flex items-center gap-5">

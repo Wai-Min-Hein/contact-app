@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "../css/output.css";
 import SideBar from "./Components/SideBar";
 import NavBar from "./Components/NavBar";
@@ -9,7 +9,23 @@ import Suggestion from "./Pages/Suggestion";
 import New from "./Pages/New";
 import Person from "./Pages/Person";
 import TrashTable from "./Pages/TrashTable";
+import Often from "./Pages/Often";
+import Other from "./Pages/Other"
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase.config";
+
 const App = () => {
+
+  const nav = useNavigate()
+
+  useEffect(() => {
+    onAuthStateChanged(auth, res => {
+      if(!res?.accessToken)
+        nav('/login')
+      
+    })
+  }, [])
 
   const location = useLocation()
 
@@ -33,6 +49,8 @@ const App = () => {
           <Route path="/new" element={<New />} />
         <Route path='/person/:id' element={<Person/>}/>
         <Route path='/trash' element={<TrashTable/>}/>
+        <Route path='/often' element={<Often/>}/>
+        <Route path='/other' element={<Other/>}/>
 
         </Routes>
       </div>

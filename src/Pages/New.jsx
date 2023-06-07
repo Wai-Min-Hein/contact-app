@@ -7,6 +7,7 @@ import moment from "moment/moment";
 import { getUniqueID } from "../Services/Common/Uuid/UniqueId";
 import {LuImagePlus} from 'react-icons/lu'
 import { uploadContactImage } from "../Services/Apis/ImageUploadApi";
+import { toast } from "react-toastify";
 
 
 
@@ -20,8 +21,8 @@ const New = () => {
 
   
 
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem('user'))
+  // const token = localStorage.getItem("token");
+  const userEmail = localStorage.getItem('userEmail')
 
 
   const [name, setName] = useState("");
@@ -37,8 +38,8 @@ const fileRef = useRef()
 
   const [imgUrl, setImgUrl] = useState("")
 
-  const userName = user.name
-  const userEmail = user.email
+  const userName = 'wa'
+  // const userEmail = 'wai@gmail.com'
 
   
 
@@ -48,7 +49,7 @@ const fileRef = useRef()
 
 
   const getTime = () => moment().format('llll')
-  const contactData = { email, name, phone,  address, jobTitle,imgUrl, createDate: getTime(), updateDate: getTime(),contactId:id,userToken: token,userName,userEmail };
+  const contactData = { email, name, phone,  address, jobTitle,imgUrl, createDate: getTime(), updateDate: getTime(),contactId:id,userName,userEmail };
 
 
   
@@ -57,6 +58,7 @@ const fileRef = useRef()
     e.preventDefault();
     postContactData(contactData)
     nav('/')
+    toast.success('Contact created.')
     
   }
 
@@ -80,9 +82,9 @@ const fileRef = useRef()
 
  
 
-  useEffect(() => {
-    if (!token) nav("/login");
-  }, []);
+  // useEffect(() => {
+  //   if (!token) nav("/login");
+  // }, []);
   return (
     <motion.div
       initial={{ marginLeft: "20%" }}

@@ -1,8 +1,17 @@
 import {  addDoc, collection, deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { firestore } from "../../../firebase.config";
 
+let userRef = collection(firestore, 'users')
 let contactsRef = collection(firestore, 'contacts')
 let trashRef = collection(firestore, 'trash')
+
+export const postUserData = (object) => {
+  addDoc(userRef, object)
+    .then(() => {})
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 
 export const postContactData = (object) => {
@@ -70,8 +79,8 @@ export const postContactData = (object) => {
 
   }
 
-  export const getAllTrashData = (setAllTrash,userToken) => {
-    const contactByToken = query(trashRef, where("userToken", "==", userToken));
+  export const getAllTrashData = (setAllTrash,userEmail) => {
+    const contactByToken = query(trashRef, where("userEmail", "==", userEmail));
 
     onSnapshot(contactByToken, (response) => {
       setAllTrash(

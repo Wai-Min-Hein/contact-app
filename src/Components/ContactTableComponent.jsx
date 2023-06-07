@@ -18,24 +18,30 @@ const ContactTableComponent = ({
   checkedAmount,
   setCheckedAmount,
   minusClick,
-  index
+  index,
 }) => {
+  const nameBgColors = [
+    "bg-[#482ff7]",
+    "bg-[#9c1de7]",
+    "bg-[#f3558e]",
+    "bg-[#f3f169]",
+    "bg-[#a7ff83]",
+    "bg-[#28c7fa]",
+    "bg-[#ea7dc7]",
+  ];
 
-  const nameBgColors = ['bg-[#482ff7]','bg-[#9c1de7]','bg-[#f3558e]','bg-[#f3f169]','bg-[#a7ff83]','bg-[#28c7fa]','bg-[#ea7dc7]']
-  
-  const contactImage = contact?.imgUrl
+  const contactImage = contact?.imgUrl;
   const ref = useRef();
   const [isHovered, setIsHovered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
 
   const username = contact?.name;
 
-
   const nav = useNavigate();
 
   const contactId = contact?.contactId;
 
-  const delContactId = contact?.id
+  const delContactId = contact?.id;
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -52,60 +58,53 @@ const ContactTableComponent = ({
     setIsChecked(event.target.checked);
   };
 
-  const getTime= () => moment().format('LLL')
+  const getTime = () => moment().format("LLL");
 
-  const trashData= {...contact, deletionDate: getTime()}
+  const trashData = { ...contact, deletionDate: getTime() };
 
   const swalWithButtons = Swal.mixin({
     customClass: {
-        confirmButton: "bg-button text-white px-3 py-2 rounded-md text-xl ml-3 mx-3",
-        cancelButton: "bg-red-500 text-white px-3 py-2 rounded-md text-xl",
+      confirmButton:
+        "bg-[#28c7fa] text-white px-3 py-2 rounded-md text-xl ml-3 mx-3",
+      cancelButton: "bg-red-500 text-white px-3 py-2 rounded-md text-xl",
     },
-    buttonsStyling: false
-  })
+    buttonsStyling: false,
+  });
 
   // const colorRandomLength = Math.floor(Math.random()* (nameBgColors?.length))
-  const colorCode =  nameBgColors[4]
-
-
-  
-
-  
-
-
-  
+  const colorCode = nameBgColors[index];
 
   const handleDelete = () => {
-
-    swalWithButtons.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteContact(delContactId)
-        updateTrash(trashData);
-        swalWithButtons.fire(
-          'Deleted!',
-          'Your contact has been deleted.',
-          'success'
-        )
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithButtons.fire(
-          'Cancelled',
-          'Your imaginary contact is safe :)',
-          'error'
-        )
-      }
-    })
-    
+    swalWithButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          deleteContact(delContactId);
+          updateTrash(trashData);
+          swalWithButtons.fire(
+            "Deleted!",
+            "Your contact has been deleted.",
+            "success"
+          );
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithButtons.fire(
+            "Cancelled",
+            "Your imaginary contact is safe :)",
+            "error"
+          );
+        }
+      });
   };
 
   useEffect(() => {
@@ -121,21 +120,15 @@ const ContactTableComponent = ({
     setCheckedAmount(0);
   }, [minusClick]);
 
-
-
   return (
     <tr
-      
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`cursor-pointer relative   ${
         isChecked || isHovered ? "bg-[#4f546b]" : ""
       }`}
     >
-      <td
-        
-        className=" w-[40%] sm:w-[35%] md:w-[30%] lg:w-1/4"
-      >
+      <td className=" w-[40%] sm:w-[35%] md:w-[30%] lg:w-1/4">
         <div className="flex items-center justify-start gap-2">
           {isChecked || isHovered ? (
             <div className="md:w-10 md:h-10 w-6 h-6 flex items-center">
@@ -148,17 +141,23 @@ const ContactTableComponent = ({
             </div>
           ) : (
             <div
-            onClick={() => {
-              nav(`person/${contactId}`);
-            }}
-             className="md:w-10 md:h-10 w-6 h-6  overflow-hidden ">
-              {contactImage? (
-                <img src={contactImage} className="w-full h-full rounded-full " alt="" />
+              onClick={() => {
+                nav(`person/${contactId}`);
+              }}
+              className="md:w-10 md:h-10 w-6 h-6  overflow-hidden "
+            >
+              {contactImage ? (
+                <img
+                  src={contactImage}
+                  className="w-full h-full rounded-full "
+                  alt=""
+                />
               ) : (
-
-                <div className={`w-full h-full rounded-full ${colorCode} grid place-items-center`}>
-                <h1 className="text-xl ">{username && username[0]}</h1>
-              </div>
+                <div
+                  className={`w-full h-full rounded-full bg-[#28c7fa] grid place-items-center`}
+                >
+                  <h1 className="text-xl ">{username && username[0]}</h1>
+                </div>
               )}
             </div>
           )}
@@ -193,7 +192,7 @@ const ContactTableComponent = ({
         className="relative "
       ></td> */}
       <td className="hidden md:block">
-        {(isChecked || isHovered||modalActive) && (
+        {(isChecked || isHovered || modalActive) && (
           <div
             onClick={() => nav("/")}
             className={`flex items-center justify-end gap-4  `}
@@ -214,7 +213,7 @@ const ContactTableComponent = ({
               transition={{ duration: 0.2 }}
               className="absolute top-[3rem]   right-0 px-4 py-6 bg-button text-button-text shadow-lg rounded-sm z-50"
             >
-              <div  className="z-50">
+              <div className="z-50">
                 <div className="flex items-center justify-start gap-5">
                   <AiFillPrinter />
                   <span>To print out</span>

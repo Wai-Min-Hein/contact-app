@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react"
-import { useLoginMutation } from "../Services/Apis/authApi"
+// import { useLoginMutation } from "../Services/Apis/authApi"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { addUser } from "../Services/slice/userSlice"
+import { toast } from "react-toastify"
+import { loginApi } from "../Services/Apis/authApi"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "../../firebase.config"
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -10,28 +14,49 @@ const Login = () => {
 
   const contactData = {email, password}
 
-  const [login] = useLoginMutation()
+  // const [login] = useLoginMutation()
   const nav = useNavigate()
 
   const dispatch = useDispatch()
 
   
+  useEffect(() => {
+    onAuthStateChanged(auth, res => {
+      if(res?.accessToken)
 
+        nav("/")})
+  }, [])
 
-  const handleLogin =async (e) => {
+  // const handleLogin =async (e) => {
+  //   try {
+  //     e.preventDefault()
+  //     const {data}= await login(contactData)
+  //     console.log(data)
+  //     dispatch(addUser(data))
+  //     if(data.success) nav('/')
+  //     toast.success("Sign in successfully")
+  //   } catch (error) {
+  //     toast.error("Cannot sign in to your account. Please try again.")
+
+  //     console.log(error)
+  //   }
+  // }
+
+  const login = async (e) => {
     try {
       e.preventDefault()
-      const {data}= await login(contactData)
-      console.log(data)
-      dispatch(addUser(data))
-      if(data.success) nav('/')
-    } catch (error) {
-      console.log(error)
+      let res = await loginApi(email, password);
+      toast.success("Signed In to your account!");
+      localStorage.setItem("userEmail", res.user.email);
+      nav("/home");
+    } catch (err) {
+      console.log(err);
+      toast.error("Please Check your Credentials");
     }
-  }
+  };
   return (
     <div className="bg-transparent w-full h-screen grid place-items-center">
-      <form onSubmit={handleLogin} action="" className=" w-[20rem] mx-auto">
+      <form onSubmit={login} action="" className=" w-[20rem] mx-auto">
         
         <div className="my-5">
           <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Email" className="w-full py-2 px-3 focus:outline-none bg-transparent border bottom-2" />

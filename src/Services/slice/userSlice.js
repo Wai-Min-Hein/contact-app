@@ -20,8 +20,8 @@ const userSlice = createSlice({
 
     },
     removeUser: () => {
-      localStorage.removeItem('user')
-      localStorage.removeItem('token')
+      localStorage.setItem('user', null)
+      localStorage.setItem('token', null)
     }
   }
 })

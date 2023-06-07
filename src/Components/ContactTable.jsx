@@ -48,14 +48,17 @@ const ContactTable = () => {
   const nav = useNavigate();
 
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
 
-  const userEmail = user?.email
+  // const userEmail = user?.email
 
+  const userEmail = localStorage.getItem("userEmail");
 
-  useEffect(() => {
-    if (!token) nav("/login");
-  }, []);
+console.log('object')
+
+  // useEffect(() => {
+  //   if (!token) nav("/login");
+  // }, []);
 
   // const { data } = useGetContactQuery(token);
 
@@ -231,7 +234,8 @@ const searchItems =searchContact.length>0 ? allContacts?.filter(contact => conta
               <p className="my-3">Contacts ({allContacts?.length})</p>
             </td>
           </tr>
-          {searchItems?.map((contact, index) => (
+          {
+          searchItems.length>0?( searchItems?.map((contact, index) => (
             <ContactTableComponent
               key={index}
               index={index}
@@ -241,7 +245,8 @@ const searchItems =searchContact.length>0 ? allContacts?.filter(contact => conta
               minusClick={minusClick}
               // nameBgColors={nameBgColors}
             />
-          ))}
+          ))): <h1>No Contact found</h1>
+          }
         </tbody>
       </table>
     </motion.div>

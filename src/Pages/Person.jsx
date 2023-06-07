@@ -39,6 +39,7 @@ const Person = () => {
     getContactById(setContact, id);
   }, []);
 
+
   // const [name, setName] = useState(contact?.name);
   // const [phone, setPhone] = useState(contact?.phone);
   // const [email, setEmail] = useState(contact?.email);
@@ -64,14 +65,14 @@ const Person = () => {
 
   const { menuActive } = useContext(StateContext);
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const username = contact?.name;
 
   const [editActive, setEditActive] = useState(false);
 
-  useEffect(() => {
-    if (!token) nav("/login");
-  }, []);
+  // useEffect(() => {
+  //   if (!token) nav("/login");
+  // }, []);
   return (
     <motion.div
     initial={tablet?{ marginLeft: "18%" }:{ marginLeft: 0 }}
@@ -118,8 +119,10 @@ const Person = () => {
               ) : (
                 <div className="w-[10rem] h-[10rem] rounded-full bg-green-500 grid place-items-center">
                   <h1 className="text-5xl">{username && username[0]}</h1>
+                  {/* <h1 className="text-5xl">w</h1> */}
                 </div>
               )}
+              {/* <h1 className="text-xl">w</h1> */}
               <h1 className="text-xl">{username}</h1>
             </div>
           )}
